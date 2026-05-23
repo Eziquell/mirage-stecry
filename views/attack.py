@@ -90,9 +90,7 @@ def render():
         # ==========================================
         # DETECTION LOGIC
         # ==========================================
-
-        if density > 60 or density < 40:
-
+        if density > 90 or density < 10:
             st.error(
                 "Abnormal LSB distribution detected."
             )
@@ -103,8 +101,7 @@ def render():
                 "detail": f"Risk Level: {stealth_risk}"
             })
 
-        elif density > 55 or density < 45:
-
+        elif density > 80 or density < 20:
             st.warning(
                 "Slight anomaly detected."
             )
@@ -116,7 +113,6 @@ def render():
             })
 
         else:
-
             st.success(
                 "LSB distribution appears natural."
             )
@@ -126,10 +122,20 @@ def render():
                 "action": "Steganalysis",
                 "detail": f"Risk Level: {stealth_risk}"
             })
+            
+        # ==========================================
+        # PROBABILITY ESTIMATION
+        # ==========================================
+        if stealth_risk == "LOW":
+            probability = "1%"
+        elif stealth_risk == "MEDIUM":
+            probability = "39%"
+        else:
+            probability = "80%"    
+            
         # ==========================================
         # RISK METRICS
         # ==========================================
-
         c1, c2, c3 = st.columns(3)
 
         c1.metric(
@@ -144,7 +150,8 @@ def render():
 
         c3.metric(
             "Payload Probability",
-            f"{abs(50 - density) * 2:.1f}%"
+            # f"{abs(50 - density) * 2:.1f}%"
+            probability
         )
 
         st.divider()

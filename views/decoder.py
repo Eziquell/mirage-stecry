@@ -88,9 +88,13 @@ def render():
                 "action": "Payload Extraction",
                 "detail": extraction_method
             })
-            st.success(
-                "Hidden payload extracted successfully."
-            )
+            
+            if extracted_text == "Invalid password or corrupted image!":
+                st.error(extracted_text)
+            else:
+                st.success(
+                    "Hidden payload extracted successfully."
+                )
             
             st.subheader(
                 "Extracted Payload"
@@ -114,14 +118,24 @@ def render():
                 extraction_method
             )
 
+            if extracted_text == "Invalid password or corrupted image!":
+
+                payload_len = 0
+                status = "FAILED"
+
+            else:
+
+                payload_len = len(extracted_text)
+                status = "RECOVERED"
+
             c2.metric(
                 "Payload Length",
-                len(extracted_text)
+                payload_len
             )
 
             c3.metric(
                 "Status",
-                "RECOVERED"
+                status
             )
 
             # ======================================

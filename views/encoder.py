@@ -90,15 +90,18 @@ def render():
         # ==========================================
 
         if st.button("Embed Payload"):
-
             if not payload:
-
                 st.warning(
                     "Please enter a secret payload."
                 )
 
-            else:
+            elif not lsb_password:
 
+                st.error(
+                    "Password/key is required."
+                )
+
+            else:
                 with st.spinner(
                     "Embedding secret payload..."
                 ):

@@ -5,8 +5,10 @@ def embed_data(img, data, method, key_seed=None):
 
     img_flat = img.flatten()
 
+    payload = f"MIRAGE::{key_seed}::{data}"
+
     binary_data = (
-        "".join(format(ord(i), "08b") for i in data)
+        "".join(format(ord(i), "08b") for i in payload)
         + "1111111111111110"
     )
 
@@ -69,7 +71,17 @@ def extract_data(img, method, key_seed=None):
             for i in range(0, len(bin_str), 8)
         )
 
-        return extracted
+        parts = extracted.split("::", 2)
+
+        if len(parts) == 3:
+
+            header, saved_key, real_message = parts
+
+            if header == "MIRAGE" and saved_key == key_seed:
+
+                return real_message
+
+        return "Invalid password or corrupted image!"
 
     except:
         return "Extraction failed!"
